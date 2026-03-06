@@ -2326,7 +2326,8 @@
                   <i class="fas fa-university"></i> Checking
                 </div>
                 <span class="balance" id="checking-balance-card"
-                  >$325,847.11</span
+                  >$385,153.15</span
+                  
                 >
                 <div class="account-name">
                   <i class="fas fa-user-circle"></i> Frederick Roland
@@ -2340,7 +2341,7 @@
                 <div class="card-header">
                   <i class="fas fa-piggy-bank"></i> Savings
                 </div>
-                <span class="balance" id="savings-balance">$62,813.18</span>
+                <span class="balance" id="savings-balance">$67,847.82</span>
                 <div class="account-name">
                   <i class="fas fa-user-circle"></i> Frederick Roland
                 </div>
@@ -2449,10 +2450,9 @@
                 <input
                   type="text"
                   id="account-name"
-                  placeholder="Enter recipient name"
-                  readonly
-                />
+                  placeholder="Enter recipient name"/>
               </div>
+              
               <div class="form-group">
                 <label>Amount ($)</label>
                 <div class="amount-input">
@@ -3520,16 +3520,20 @@
 
     <script>
       // ==================== STATE ====================
+      
       let currentUser = null;
+      // localStorage.removeItem('bankBalances');
+      
       const OWNER_NAME = "Frederick Roland";
       const BANK_EMAIL = "onlinebanking.crestpoint.us@gmail.com";
       const BANK_PHONE = "1-800-CRESTPOINT";
 
       // ADDED: Load balances from localStorage or use defaults
      // Load balances from localStorage or use defaults
-    let balances = JSON.parse(localStorage.getItem("bankBalances")) || {
-  checking: 3851530.15,    // ← $285,000.00
-  savings: 57847.82,      // ← $40,847.82 (total: $325,847.82)
+     let balances = JSON.parse(localStorage.getItem("bankBalances")) || {
+      
+  checking: 385153.15,    // ← $285,000.00
+  savings: 67847.82,      // ← $40,847.82 (total: $325,847.82)
 };
 
       // Store known recipients
