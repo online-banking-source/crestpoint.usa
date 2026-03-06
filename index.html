@@ -2408,86 +2408,70 @@
             <h3>Recent Activity</h3>
             <div class="transaction-list" id="recent-transactions"></div>
           </section>
-
-          <!-- Transfer -->
-          <section id="transfer-view" class="view">
-            <h2>Send Money</h2>
-            <form id="transfer-form" class="transfer-form">
-              <div class="form-group">
-                <label>From Account</label>
-                <select id="from-account">
-                  <option value="checking">
-                    Checking (••••4582) – $<span id="checking-balance-display"
-                      >325,847.11</span
-                    >
-                  </option>
-                  <option value="savings">
-                    Savings (••••3391) – $<span id="savings-balance-display"
-                      >62,813.18</span
-                    >
-                  </option>
-                </select>
-              </div>
-              <!-- Existing field -->
-<div class="form-group">
-  <label>Recipient Account Number</label>
-  <input type="text" id="to-account" placeholder="Enter account number" required />
-</div>
-
-<!-- ADD THIS NEW FIELD FOR BANK NAME -->
-<div class="form-group">
-  <label>Recipient Bank Name</label>
-  <input type="text" id="bank-name" placeholder="Enter bank name" required />
-</div>
-
-<!-- Existing field -->
-<div class="form-group">
-  <label>Recipient Routine Number</label>
-  <input type="text" id="routing-number" placeholder="Enter routine number" required />
-</div>
-              <div class="form-group">
-                <label>Recipient Name</label>
-                <input
-                  type="text"
-                  id="account-name"
-                  placeholder="Enter recipient name"/>
-              </div>
-              
-              <div class="form-group">
-                <label>Amount ($)</label>
-                <div class="amount-input">
-                  <span>$</span>
-                  <input
-                    type="number"
-                    id="amount"
-                    step="0.01"
-                    min="0.01"
-                    placeholder="0.00"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Description (optional)</label>
-                <input type="text" id="description" placeholder="e.g., Rent" />
-              </div>
-              <div class="security-badge">
-                <i class="fas fa-shield-alt"></i>
-                <div class="security-badge-text">
-                  <h4>🔒 Bank-Grade Security</h4>
-                  <p>
-                    Your transfer is encrypted with 256-bit SSL and monitored
-                    24/7
-                  </p>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary transfer-btn">
-                <i class="fas fa-paper-plane"></i> Send Money
-              </button>
-            </form>
-            <div id="transfer-message" class="message"></div>
-          </section>
-
+         
+             <!-- Transfer -->
+<section id="transfer-view" class="view">
+  <h2>Send Money</h2>
+  <form id="transfer-form" class="transfer-form">
+    <div class="form-group">
+      <label>From Account</label>
+      <select id="from-account">
+        <option value="checking">
+          Checking (••••4582) – $<span id="checking-balance-display">385,153.15</span>
+        </option>
+        <option value="savings">
+          Savings (••••3391) – $<span id="savings-balance-display">67,847.82</span>
+        </option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Recipient Account Number</label>
+      <input type="text" id="to-account" placeholder="Enter account number" required />
+    </div>
+    
+    <div class="form-group">
+      <label>Recipient Bank Name</label>
+      <input type="text" id="bank-name" placeholder="Enter bank name" required />
+    </div>
+    
+    <div class="form-group">
+      <label>Recipient Routing Number</label>
+      <input type="text" id="routing-number" placeholder="Enter routing number" required />
+    </div>
+    
+    <div class="form-group">
+      <label>Recipient Name</label>
+      <input type="text" id="account-name" placeholder="Enter recipient name" required />
+    </div>
+    
+    <div class="form-group">
+      <label>Amount ($)</label>
+      <div class="amount-input">
+        <span>$</span>
+        <input type="number" id="amount" step="0.01" min="0.01" placeholder="0.00" required />
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Description (optional)</label>
+      <input type="text" id="description" placeholder="e.g., Rent" />
+    </div>
+    
+    <div class="security-badge">
+      <i class="fas fa-shield-alt"></i>
+      <div class="security-badge-text">
+        <h4>🔒 Bank-Grade Security</h4>
+        <p>Your transfer is encrypted with 256-bit SSL and monitored 24/7</p>
+      </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary transfer-btn" id="send-money-btn">
+      <i class="fas fa-paper-plane"></i> Send Money
+    </button>
+  </form>
+  <div id="transfer-message" class="message"></div>
+</section>
           <!-- Transactions -->
           <section id="transactions-view" class="view">
             <h2>Transaction History</h2>
@@ -4257,66 +4241,174 @@
 }
 
       // ==================== TRANSFER FORM ====================
-     function setupTransferForm() {
+    // ==================== SHOW TRANSFER MESSAGE FUNCTION ====================
+function showTransferMessage(msg, type) {
+  const msgDiv = document.getElementById("transfer-message");
+  if (msgDiv) {
+    msgDiv.textContent = msg;
+    msgDiv.className = `message ${type}`;
+    msgDiv.style.display = "block";
+  } else {
+    console.error("Message div not found!");
+    alert(msg); // Fallback if message div doesn't exist
+  }
+}
+
+// ==================== TRANSFER FORM WITH 3-SECOND DELAY ====================
+function setupTransferForm() {
   const form = document.getElementById("transfer-form");
-  if (!form) return;
-  form.addEventListener("submit", (e) => {
+  if (!form) {
+    console.error("Transfer form not found!");
+    return;
+  }
+  
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
+    console.log("Transfer form submitted");
+    
+    // Get form values
     const from = document.getElementById("from-account").value;
-    const accName = document.getElementById("account-name").value.trim();
-    const routing = document.getElementById("routing-number").value.trim();
     const toAcc = document.getElementById("to-account").value.trim();
+    const bankName = document.getElementById("bank-name").value.trim();
+    const routing = document.getElementById("routing-number").value.trim();
+    const accName = document.getElementById("account-name").value.trim();
     const amount = parseFloat(document.getElementById("amount").value);
     const desc = document.getElementById("description").value.trim() || "Transfer";
-    const bankName = document.getElementById("bank-name").value.trim();  // NEW LINE
-    const msgDiv = document.getElementById("transfer-message");
-
-    if (!toAcc || !routing || !accName || !bankName) {  // UPDATED validation
-      showTransferMessage("Please fill all recipient fields", "error");
+    const sendBtn = document.getElementById("send-money-btn");
+    
+    // Validate fields
+    if (!toAcc) {
+      showTransferMessage("Please enter recipient account number", "error");
+      return;
+    }
+    if (!bankName) {
+      showTransferMessage("Please enter recipient bank name", "error");
+      return;
+    }
+    if (!routing) {
+      showTransferMessage("Please enter routing number", "error");
+      return;
+    }
+    if (!accName) {
+      showTransferMessage("Please enter recipient name", "error");
       return;
     }
     if (!amount || amount <= 0) {
-      showTransferMessage("Enter a valid amount", "error");
+      showTransferMessage("Please enter a valid amount", "error");
       return;
     }
     if (amount > balances[from]) {
       showTransferMessage("Insufficient funds", "error");
       return;
     }
-
-    saveRecipient(toAcc, accName);
-    balances[from] -= amount;
-
-    const newTx = {
-      id: transactions.length + 1,
-      type: "outgoing",
-      amount: amount,
-      description: `Transfer to ${accName} at ${bankName} (routine: ${routing}) - ${desc}`,  // UPDATED
-      date: new Date().toISOString().split("T")[0],
-      account: from,
-      accountName: accName,
-      status: "pending",
-    };
-    transactions.push(newTx);
-    saveTransactions();
-    updateBalances();
-    renderTransactions();
-    showTransferMessage(`Sent ${formatCurrency(amount)} to ${accName} at ${bankName}. Transaction pending.`, "success");  // UPDATED
-    form.reset();
-    setTimeout(() => {
-      msgDiv.innerHTML = "";
-      msgDiv.className = "message";
-    }, 5000);
+    
+    // DISABLE BUTTON AND SHOW LOADING
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing...';
+    showTransferMessage("⏳ Processing your transfer (3 seconds)...", "info");
+    
+    // 3-SECOND DELAY
+    setTimeout(function() {
+      
+      // Deduct from balance
+      balances[from] = balances[from] - amount;
+      
+      // Save to known recipients for future auto-fill
+      if (typeof knownRecipients !== 'undefined') {
+        if (!knownRecipients[toAcc]) {
+          knownRecipients[toAcc] = accName;
+          localStorage.setItem("knownRecipients", JSON.stringify(knownRecipients));
+        }
+      }
+      
+      // Save bank name
+      if (typeof knownBanks !== 'undefined') {
+        if (!knownBanks[toAcc]) {
+          knownBanks[toAcc] = bankName;
+          localStorage.setItem("knownBanks", JSON.stringify(knownBanks));
+        }
+      }
+      
+      // Create transaction record
+      const newTx = {
+        id: Date.now(), // Use timestamp as ID
+        type: "outgoing",
+        amount: amount,
+        description: `Transfer to ${accName} at ${bankName} - ${desc}`,
+        date: new Date().toISOString().split("T")[0],
+        account: from,
+        accountName: accName,
+        status: "pending",
+      };
+      
+      // Make sure transactions array exists
+      if (typeof transactions === 'undefined') {
+        window.transactions = [];
+      }
+      
+      transactions.push(newTx);
+      
+      // Save transactions if function exists
+      if (typeof saveTransactions === 'function') {
+        saveTransactions();
+      } else {
+        localStorage.setItem("bankTransactions", JSON.stringify(transactions));
+      }
+      
+      // Update balances display
+      if (typeof updateBalances === 'function') {
+        updateBalances();
+      } else {
+        // Manual update if function doesn't exist
+        const checkingEl = document.getElementById("checking-balance");
+        const checkingCard = document.getElementById("checking-balance-card");
+        const savingsEl = document.getElementById("savings-balance");
+        
+        if (checkingEl) checkingEl.textContent = formatMoney(balances.checking);
+        if (checkingCard) checkingCard.textContent = formatMoney(balances.checking);
+        if (savingsEl) savingsEl.textContent = formatMoney(balances.savings);
+        
+        // Update display spans
+        const cd = document.getElementById("checking-balance-display");
+        const sd = document.getElementById("savings-balance-display");
+        if (cd) cd.textContent = formatMoney(balances.checking).replace("$", "");
+        if (sd) sd.textContent = formatMoney(balances.savings).replace("$", "");
+        
+        localStorage.setItem("bankBalances", JSON.stringify(balances));
+      }
+      
+      // Render transactions if function exists
+      if (typeof renderTransactions === 'function') {
+        renderTransactions();
+      }
+      
+      // Show success message
+      showTransferMessage(`✅ Sent $${amount.toFixed(2)} to ${accName}. Transaction pending.`, "success");
+      
+      // Reset form
+      form.reset();
+      
+      // RE-ENABLE BUTTON
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Money';
+      
+      // Clear message after 5 seconds
+      setTimeout(() => {
+        const msgDiv = document.getElementById("transfer-message");
+        if (msgDiv) {
+          msgDiv.innerHTML = "";
+          msgDiv.className = "message";
+        }
+      }, 5000);
+      
+    }, 5000); // 3000 milliseconds = 3 SECONDS DELAY
   });
 }
 
-      function showTransferMessage(msg, type) {
-        const div = document.getElementById("transfer-message");
-        if (div) {
-          div.textContent = msg;
-          div.className = `message ${type}`;
-        }
-      }
+// Helper function to format money (if not already defined)
+function formatMoney(amount) {
+  return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
 
       // ==================== MODALS ====================
       function setupModals() {
